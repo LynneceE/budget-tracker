@@ -19,6 +19,8 @@ request.onsuccess = function(event) {
     // check if app is online , if yes the run uploadTransaction()
     if (navigator.online) {
                         // i'll add uploadTransaction() here
+        uploadTransaction();                
+
     }
 };
 // if unsuccessful show the error
@@ -38,3 +40,49 @@ function saveRecord(record) {
     budgetObjectStore.add(record);
 }
 
+
+// uploadTransaction ()
+function uploadTransaction () {
+    // open transaction on the database
+    const transaction = db.transaction(['new_transaction'], 'readwrite');
+
+    // access object store
+    const budgetObjectStore = transaction.objectStore('new_transaction');
+
+    // get all records from store and set to a variable
+    const getAll = budgetObjectStore.getAll();
+
+
+
+    getAll.onsuccess = function() {
+        // take any data that may be in indexedDB and send it to the server
+        if (getAll.result.length > 0) {
+          fetch('/api/transaction', {
+            method: 'POST',
+            body: JSON.stringify(getAll.result),
+            headers: {
+              Accept: 'application/json, text/plain, */*',
+              'Content-Type': 'application/json'
+            }
+          })
+            .then(response => response.json())
+            .then(serverResponse => {
+              if (serverResponse.message) {
+                throw new Error(serverResponse);
+              }
+    
+              const transaction = db.transaction(['new_transaction'], 'readwrite');
+              const pizzaObjectStore = transaction.objectStore('new_transaction');
+              // clear the store
+              pizzaObjectStore.clear();
+            })
+            .catch(err => {
+              // set reference to redirect back here
+              console.log(err);
+            });
+        }
+      };
+}
+
+// listen for the app to come back online
+window.addEventListener('online', uploadTransaction);
