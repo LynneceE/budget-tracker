@@ -11,7 +11,7 @@ SO THAT my account balance is accurate when I am traveling
 
 
 
-![alt text]<img src="images/pwa.png>
+<img src="/images/pwa.png>">
 
 
 
@@ -23,7 +23,7 @@ https://infinite-tundra-37735.herokuapp.com/
 
 
 
-# Contact me
+# Contact Me
 
 
 For any questions email me at lynneutsey@gmail.com
