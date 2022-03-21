@@ -11,7 +11,7 @@ SO THAT my account balance is accurate when I am traveling
 
 
 
-<img src="images/pwa.png>
+![alt text]<img src="images/pwa.png>
 
 
 
